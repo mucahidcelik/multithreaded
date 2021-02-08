@@ -6,7 +6,7 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.util.concurrent.Callable;
 
-public class WorkerThread implements Callable<Integer> {
+public class WorkerThread implements Callable<String> {
     private File inputFile;
     private File outputFile;
     public WorkerThread(File file){
@@ -15,7 +15,7 @@ public class WorkerThread implements Callable<Integer> {
     }
 
     @Override
-    public Integer call() throws Exception {
+    public String call() throws Exception {
         BufferedReader reader = new BufferedReader(new FileReader(inputFile));
         int sum=0;
         String line;
@@ -26,6 +26,6 @@ public class WorkerThread implements Callable<Integer> {
         FileWriter fileWriter = new FileWriter(outputFile);
         fileWriter.write(Integer.toString(sum));
         fileWriter.close();
-        return sum;
+        return inputFile.getName() + ": " + sum;
     }
 }

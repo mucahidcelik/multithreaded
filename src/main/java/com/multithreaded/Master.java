@@ -1,17 +1,18 @@
 package com.multithreaded;
 
 
-import com.multithreaded.WorkerThread;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.*;
 
 @Configuration
 public class Master {
     private ThreadPoolExecutor executor;
+    List<Future<WorkerThread>> futures = new ArrayList<>();
     public Master(){
         this.executor = (ThreadPoolExecutor) Executors.newFixedThreadPool(5);
     }
@@ -22,9 +23,22 @@ public class Master {
             for (File f : inputDirectory.listFiles()) {
                 if(f.isFile()){
                     Callable w = new WorkerThread(f);
-                    Future future = executor.submit(w);
+                    futures.add(executor.submit(w));
                 }
             }
+            try{
+                for (Future f : futures){
+                    f.get();
+                    if(!f.isDone()){
+                        System.out.println("Could not complete task");
+                    }else{
+                        System.out.println(f.get());
+                    }
+                }
+            }catch (ExecutionException e){
+                e.printStackTrace();
+            }
+
         }
     }
 }
