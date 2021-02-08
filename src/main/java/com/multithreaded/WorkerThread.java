@@ -9,9 +9,9 @@ import java.util.concurrent.Callable;
 public class WorkerThread implements Callable<String> {
     private File inputFile;
     private File outputFile;
-    public WorkerThread(File file){
+    public WorkerThread(File file, String outputDirectoryPath){
         this.inputFile = file;
-        this.outputFile = new File(file.getParent()+"/../output/"+file.getName());
+        this.outputFile = new File(outputDirectoryPath+"/"+file.getName());
     }
 
     @Override

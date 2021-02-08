@@ -1,0 +1,3 @@
+directory:
+  input: src/main/resources/input
+  output: src/main/resources/output
